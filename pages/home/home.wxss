@@ -1,11 +1,23 @@
 /* pages/home/home.wxss */
 .container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.register {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  padding: 80rpx 40rpx;
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  padding: 100rpx 40rpx;
 }
 
 .logo {
@@ -23,7 +35,6 @@
 .desc {
   font-size: 26rpx;
   color: rgba(255, 255, 255, 0.8);
-  text-align: center;
   margin-bottom: 60rpx;
 }
 
@@ -77,7 +88,7 @@
   color: #333;
 }
 
-.login-btn {
+.submit-btn {
   width: 80%;
   height: 96rpx;
   line-height: 96rpx;
@@ -87,14 +98,4 @@
   font-weight: 500;
   border-radius: 48rpx;
   border: none;
-}
-
-.login-btn:active {
-  opacity: 0.9;
-}
-
-.tips {
-  margin-top: 30rpx;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 24rpx;
 }
