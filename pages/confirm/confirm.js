@@ -9,7 +9,8 @@ Page({
     meal: '',
     mealName: '',
     items: [],
-    totalQuantity: 0
+    totalQuantity: 0,
+    totalPrice: '0.00'
   },
 
   onLoad() {
@@ -28,13 +29,15 @@ Page({
     }
 
     const totalQuantity = cart.items.reduce((sum, item) => sum + item.quantity, 0)
+    const totalPrice = cart.items.reduce((sum, item) => sum + item.quantity * parseFloat(item.price || 0), 0)
 
     this.setData({
       date: cart.date,
       meal: cart.meal,
       mealName: getMealTypeName(cart.meal),
       items: cart.items,
-      totalQuantity
+      totalQuantity,
+      totalPrice: totalPrice.toFixed(2)
     })
   },
 
@@ -76,7 +79,11 @@ Page({
   // 更新总数
   updateTotal() {
     const totalQuantity = this.data.items.reduce((sum, item) => sum + item.quantity, 0)
-    this.setData({ totalQuantity })
+    const totalPrice = this.data.items.reduce((sum, item) => sum + item.quantity * parseFloat(item.price || 0), 0)
+    this.setData({ 
+      totalQuantity,
+      totalPrice: totalPrice.toFixed(2)
+    })
   },
 
   // 输入备注
