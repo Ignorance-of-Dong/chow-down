@@ -99,6 +99,8 @@ Page({
 
   // 滚动监听 - 更新当前分类
   onScroll(e) {
+    if (this.data.intoView) return
+    
     const scrollTop = e.detail.scrollTop
     const categories = this.data.categories
     const dishesByCategory = this.data.dishesByCategory
@@ -108,7 +110,6 @@ Page({
     
     for (let i = 0; i < categories.length; i++) {
       const dishes = dishesByCategory[categories[i]] || []
-      // 每个分类高度：标题50 + 菜品数量 * 230
       const sectionHeight = 50 + dishes.length * 230
       if (scrollTop >= accumulatedHeight - 50) {
         currentCategory = categories[i]
@@ -119,6 +120,10 @@ Page({
     if (currentCategory !== this.data.currentCategory) {
       this.setData({ currentCategory })
     }
+  },
+
+  onScrollEnd() {
+    this.setData({ intoView: '' })
   },
 
   // 添加到购物车

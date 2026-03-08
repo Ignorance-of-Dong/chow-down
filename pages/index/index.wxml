@@ -49,6 +49,7 @@
       scroll-into-view="{{intoView}}"
       scroll-with-animation
       bindscroll="onScroll"
+      bindscrollend="onScrollEnd"
     >
       <!-- 加载中 -->
       <view wx:if="{{loading}}" class="loading">
