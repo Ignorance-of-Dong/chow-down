@@ -2,17 +2,17 @@
 <view class="page">
   <!-- 用户信息 -->
   <view class="user-section card">
-    <view wx:if="{{userInfo}}" class="user-info">
-      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+    <view wx:if="{{hasUserInfo && userInfo}}" class="user-info">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill" />
       <view class="info">
-        <text class="name">{{userInfo.name || '家庭成员'}}</text>
+        <text class="name">{{userInfo.nickname || '家庭成员'}}</text>
         <text class="role" wx:if="{{isAdmin}}">👨‍🍳 厨师/管理员</text>
         <text class="role" wx:else>👤 普通成员</text>
       </view>
     </view>
     <view wx:else class="login-hint">
-      <text>未登录</text>
-      <button class="login-btn" bindtap="getUserProfile">登录</button>
+      <text>点击获取微信头像和昵称</text>
+      <button class="login-btn" bindtap="getUserProfile">获取头像昵称</button>
     </view>
   </view>
 

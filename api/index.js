@@ -46,7 +46,10 @@ const userApi = {
   getMember: (id) => get(`/users/${id}`),
 
   // 更新成员（管理员）
-  updateMember: (id, data) => put(`/users/${id}`, data)
+  updateMember: (id, data) => put(`/users/${id}`, data),
+
+  // 更新自己的资料
+  updateProfile: (data) => put('/users/profile', data)
 }
 
 // ==================== 统计相关 ====================
