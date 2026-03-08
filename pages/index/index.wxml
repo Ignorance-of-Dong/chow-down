@@ -114,6 +114,9 @@
           <text class="empty-icon">🍽️</text>
           <text class="empty-text">暂无可用菜品</text>
         </view>
+        
+        <!-- 底部占位 -->
+        <view class="dish-bottom-placeholder"></view>
       </view>
     </scroll-view>
   </view>
