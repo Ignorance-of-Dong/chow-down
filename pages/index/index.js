@@ -15,6 +15,7 @@ Page({
     ],
     categories: ['热菜', '素菜', '汤类', '主食'],
     dishesByCategory: {},
+    hasDishes: false,
     cart: [],
     cartCount: 0
   },
@@ -57,17 +58,21 @@ Page({
 
       // 按分类分组，只显示可用的菜品
       const dishesByCategory = {}
+      let hasDishes = false
       this.data.categories.forEach(cat => {
-        dishesByCategory[cat] = dishes.filter(d => d.category === cat && d.status === 'available')
+        const categoryDishes = dishes.filter(d => d.category === cat && d.status === 'available')
+        dishesByCategory[cat] = categoryDishes
+        if (categoryDishes.length > 0) hasDishes = true
       })
 
       this.setData({
         dishesByCategory,
+        hasDishes,
         loading: false
       })
     } catch (err) {
       console.error('加载菜品失败', err)
-      this.setData({ loading: false })
+      this.setData({ loading: false, hasDishes: false })
     }
   },
 

@@ -52,10 +52,6 @@
             <view class="dish-info">
               <view class="dish-name">{{dish.name}}</view>
               <view class="dish-desc" wx:if="{{dish.description}}">{{dish.description}}</view>
-              <view class="dish-time" wx:if="{{dish.cookTime}}">
-                <text class="time-icon">⏱️</text>
-                <text>{{dish.cookTime}}分钟</text>
-              </view>
             </view>
             <view class="add-btn">
               <text>+</text>
@@ -66,9 +62,9 @@
     </block>
 
     <!-- 空状态 -->
-    <view wx:if="{{!loading && !hasDishes}}" class="empty-state">
+    <view wx:if="{{!hasDishes}}" class="empty-state">
       <view class="icon">🍽️</view>
-      <text>今日暂无菜品</text>
+      <text>暂无可用菜品</text>
     </view>
   </view>
 
