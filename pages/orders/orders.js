@@ -16,6 +16,9 @@ Page({
 
   onShow() {
     this.loadOrders()
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 })
+    }
   },
 
   // 加载订单列表
