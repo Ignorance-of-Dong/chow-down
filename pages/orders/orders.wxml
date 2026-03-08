@@ -1,5 +1,5 @@
 <!--pages/orders/orders.wxml-->
-<view class="page">
+<view class="page fade-in">
   <!-- 管理员标识 -->
   <view wx:if="{{isAdmin}}" class="admin-badge">
     <text>👨‍🍳 管理员视角 - 查看所有订单</text>
@@ -13,9 +13,10 @@
   <!-- 订单列表 -->
   <view wx:elif="{{orders.length > 0}}" class="order-list">
     <view
-      class="order-card card"
+      class="order-card card slide-up"
       wx:for="{{orders}}"
       wx:key="id"
+      style="animation-delay: {{index * 0.05}}s;"
     >
       <view class="order-header">
         <view class="order-info">

@@ -1,5 +1,5 @@
 <!--pages/home/home.wxml-->
-<view class="container">
+<view class="container fade-in">
   <!-- 加载中 -->
   <view wx:if="{{loading}}" class="loading">
     <text class="logo">🍽️</text>
@@ -7,7 +7,7 @@
   </view>
 
   <!-- 注册页面 -->
-  <view wx:elif="{{needRegister}}" class="register">
+  <view wx:elif="{{needRegister}}" class="register scale-in">
     <text class="logo">🍽️</text>
     <text class="title">家庭点餐助手</text>
     <text class="desc">首次使用，请设置头像和昵称</text>

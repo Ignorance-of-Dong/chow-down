@@ -1,5 +1,5 @@
 <!--pages/confirm/confirm.wxml-->
-<view class="page">
+<view class="page page-transition">
   <!-- 顶部订单信息 -->
   <view class="header">
     <view class="header-title">确认订单</view>
@@ -27,7 +27,7 @@
     </view>
     
     <view class="dish-list">
-      <view class="dish-item" wx:for="{{items}}" wx:key="id">
+      <view class="dish-item slide-up" wx:for="{{items}}" wx:key="id" style="animation-delay: {{index * 0.05}}s;">
         <view class="dish-left">
           <view class="dish-icon">🍽️</view>
         </view>

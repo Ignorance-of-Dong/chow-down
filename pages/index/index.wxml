@@ -1,5 +1,5 @@
 <!--pages/index/index.wxml-->
-<view class="page">
+<view class="page fade-in">
   <!-- 顶部栏 -->
   <view class="header">
     <view class="header-top">
@@ -144,8 +144,8 @@
   </view>
 
   <!-- 购物车弹窗 -->
-  <view wx:if="{{showCartPopup}}" class="cart-popup-mask" bindtap="toggleCartPopup">
-    <view class="cart-popup" catchtap>
+  <view wx:if="{{showCartPopup}}" class="cart-popup-mask mask-in" bindtap="toggleCartPopup">
+    <view class="cart-popup popup-in" catchtap>
       <view class="popup-header">
         <text class="popup-title">已选菜品</text>
         <text class="popup-clear" bindtap="clearCart">清空</text>
