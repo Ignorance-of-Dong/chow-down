@@ -83,9 +83,6 @@ Page({
     this.setData({ selectedMeal: meal })
   },
 
-  // 获取分类名称
-  getCategoryName,
-
   // 添加到购物车
   addToCart(e) {
     const dish = e.currentTarget.dataset.dish

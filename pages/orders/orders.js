@@ -66,18 +66,11 @@ Page({
   getStatusClass(status) {
     const classes = {
       pending: 'status-pending',
-      cooking: 'status-cooking',
+      preparing: 'status-cooking',
+      ready: 'status-cooking',
       completed: 'status-completed'
     }
     return classes[status] || ''
-  },
-
-  // 查看订单详情
-  viewOrder(e) {
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: `/pages/order/order?id=${id}`
-    })
   },
 
   // 更新订单状态（管理员）
@@ -94,24 +87,6 @@ Page({
     } catch (err) {
       console.error('更新状态失败', err)
     }
-  },
-
-  // 获取下一个状态
-  getNextStatus(currentStatus) {
-    const flow = {
-      pending: 'cooking',
-      cooking: 'completed'
-    }
-    return flow[currentStatus]
-  },
-
-  // 获取状态按钮文字
-  getStatusBtnText(status) {
-    const texts = {
-      pending: '开始制作',
-      cooking: '标记完成'
-    }
-    return texts[status]
   },
 
   // 下拉刷新

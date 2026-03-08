@@ -16,29 +16,27 @@
       class="order-card card"
       wx:for="{{orders}}"
       wx:key="id"
-      data-id="{{item.id}}"
-      bindtap="viewOrder"
     >
       <view class="order-header">
         <view class="order-info">
-          <text class="order-date">{{item.date}}</text>
-          <text class="order-meal">{{item.mealName || getMealTypeName(item.meal)}}</text>
+          <text class="order-date">{{item.order_date || item.date}}</text>
+          <text class="order-meal">{{item.meal_type === 'breakfast' ? '早餐' : item.meal_type === 'lunch' ? '午餐' : item.meal_type === 'dinner' ? '晚餐' : '夜宵'}}</text>
         </view>
-        <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'cooking' ? 'status-cooking' : 'status-completed'}}">
-          {{getStatusName(item.status)}}
+        <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'preparing' || item.status === 'ready' ? 'status-cooking' : 'status-completed'}}">
+          {{item.status === 'pending' ? '待处理' : item.status === 'preparing' ? '准备中' : item.status === 'ready' ? '已就绪' : '已完成'}}
         </view>
       </view>
 
       <view class="order-dishes">
-        <text wx:for="{{item.items}}" wx:for-item="dish" wx:key="dishId">
-          {{dish.dishName}} x{{dish.quantity}}
+        <text wx:for="{{item.items}}" wx:for-item="dish" wx:key="dish_id">
+          {{dish.name || dish.dish_name}} x{{dish.quantity}}
         </text>
       </view>
 
       <view class="order-footer">
-        <text class="order-time">{{formatDate(item.createdAt)}}</text>
-        <view wx:if="{{isAdmin && item.status !== 'completed'}}" class="status-btn" catchtap="updateStatus" data-id="{{item.id}}" data-status="{{item.status === 'pending' ? 'cooking' : 'completed'}}">
-          {{item.status === 'pending' ? '开始制作' : '标记完成'}}
+        <text class="order-time">{{item.created_at}}</text>
+        <view wx:if="{{isAdmin && item.status !== 'completed'}}" class="status-btn" catchtap="updateStatus" data-id="{{item.id}}" data-status="{{item.status === 'pending' ? 'preparing' : item.status === 'preparing' ? 'ready' : 'completed'}}">
+          {{item.status === 'pending' ? '开始准备' : item.status === 'preparing' ? '标记就绪' : '完成'}}
         </view>
       </view>
     </view>

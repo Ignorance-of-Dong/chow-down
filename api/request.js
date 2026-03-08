@@ -36,10 +36,10 @@ const request = (options) => {
             resolve({ success: true, data: res.data })
           }
         } else if (res.statusCode === 401) {
-          // 未授权，跳转登录
-          app.logout()
+          // 未授权，重新登录
+          app.login()
           wx.showToast({
-            title: '请先登录',
+            title: '正在重新登录',
             icon: 'none'
           })
           reject(res)
