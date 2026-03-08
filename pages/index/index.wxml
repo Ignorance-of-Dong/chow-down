@@ -32,8 +32,9 @@
       <view
         wx:for="{{categories}}"
         wx:key="*this"
+        wx:for-index="idx"
         class="category-item {{currentCategory === item ? 'active' : ''}}"
-        data-category="{{item}}"
+        data-index="{{idx}}"
         bindtap="onCategoryTap"
       >
         <text>{{item}}</text>
@@ -56,8 +57,8 @@
 
       <!-- 菜品列表 -->
       <view wx:else>
-        <block wx:for="{{categories}}" wx:key="*this">
-          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" id="cat-{{item}}">
+        <block wx:for="{{categories}}" wx:key="*this" wx:for-index="idx">
+          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" id="cat-{{idx}}">
             <view class="section-title">{{item}}</view>
             <view class="dish-list">
               <view

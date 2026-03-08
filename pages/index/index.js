@@ -89,10 +89,11 @@ Page({
 
   // 点击分类 - 使用 scroll-into-view
   onCategoryTap(e) {
-    const category = e.currentTarget.dataset.category
+    const index = e.currentTarget.dataset.index
+    const category = this.data.categories[index]
     this.setData({
       currentCategory: category,
-      intoView: 'cat-' + category.replace(/\s/g, '')
+      intoView: 'cat-' + index
     })
   },
 
