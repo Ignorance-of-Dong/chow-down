@@ -10,8 +10,12 @@ App({
   },
 
   onLaunch() {
-    // 自动登录
-    this.login()
+    // 检查是否已登录
+    const token = wx.getStorageSync('token')
+    if (token) {
+      this.globalData.token = token
+      this.globalData.isLoggedIn = true
+    }
   },
 
   // 登录
@@ -34,41 +38,37 @@ App({
                   wx.setStorageSync('token', token)
                   resolve({ token, user })
                 } else {
-                  // 登录失败，提示用户
-                  this.showLoginError()
+                  wx.showToast({
+                    title: response.data.message || '登录失败',
+                    icon: 'none'
+                  })
                   reject(response.data)
                 }
               },
               fail: (err) => {
-                this.showLoginError()
+                wx.showToast({
+                  title: '网络错误',
+                  icon: 'none'
+                })
                 reject(err)
               }
             })
           } else {
-            this.showLoginError()
+            wx.showToast({
+              title: '微信登录失败',
+              icon: 'none'
+            })
             reject(new Error('wx.login failed'))
           }
         },
         fail: (err) => {
-          this.showLoginError()
+          wx.showToast({
+            title: '微信登录失败',
+            icon: 'none'
+          })
           reject(err)
         }
       })
-    })
-  },
-
-  // 显示登录失败提示
-  showLoginError() {
-    wx.showModal({
-      title: '登录失败',
-      content: '请检查网络连接后重试',
-      showCancel: false,
-      confirmText: '重试',
-      success: (res) => {
-        if (res.confirm) {
-          this.login()
-        }
-      }
     })
   }
 })

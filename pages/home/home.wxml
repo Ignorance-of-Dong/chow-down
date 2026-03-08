@@ -1,0 +1,14 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <view class="logo">🍽️</view>
+  <view class="title">家庭点餐助手</view>
+  <view class="desc">让家人提前选菜，厨师根据订单准备</view>
+  
+  <button class="login-btn" loading="{{loading}}" bindtap="handleLogin">
+    微信一键登录
+  </button>
+  
+  <view class="tips">
+    <text>登录后即可开始点餐</text>
+  </view>
+</view>
