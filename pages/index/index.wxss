@@ -112,7 +112,6 @@
   flex: 1;
   display: flex;
   overflow: hidden;
-  padding-bottom: 200rpx;
 }
 
 /* 左侧分类栏 */
@@ -157,6 +156,7 @@
   flex: 1;
   height: 100%;
   background: #fff;
+  padding-bottom: 220rpx;
 }
 
 .loading {
