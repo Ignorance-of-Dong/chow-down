@@ -38,6 +38,7 @@ Page({
       const orders = (res.data || []).map(order => ({
         ...order,
         createdAt: order.created_at,
+        formattedTime: formatDate(order.created_at, 'MM-DD HH:mm'),
         items: (order.items || []).map(item => ({
           ...item,
           dishName: item.dish_name || item.name

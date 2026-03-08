@@ -34,7 +34,7 @@
       </view>
 
       <view class="order-footer">
-        <text class="order-time">{{item.created_at}}</text>
+        <text class="order-time">{{item.formattedTime}}</text>
         <view wx:if="{{isAdmin && item.status !== 'completed'}}" class="status-btn" catchtap="updateStatus" data-id="{{item.id}}" data-status="{{item.status === 'pending' ? 'preparing' : item.status === 'preparing' ? 'ready' : 'completed'}}">
           {{item.status === 'pending' ? '开始准备' : item.status === 'preparing' ? '标记就绪' : '完成'}}
         </view>
