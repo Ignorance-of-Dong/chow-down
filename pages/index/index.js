@@ -139,6 +139,8 @@ Page({
     
     if (cartMap[dish.id]) {
       cartMap[dish.id]++
+      const item = cart.find(c => c.id === dish.id)
+      if (item) item.quantity++
     } else {
       cartMap[dish.id] = 1
       cart.push({ 
@@ -164,6 +166,8 @@ Page({
 
     if (cartMap[dish.id] && cartMap[dish.id] > 1) {
       cartMap[dish.id]--
+      const item = cart.find(c => c.id === dish.id)
+      if (item) item.quantity--
     } else if (cartMap[dish.id] === 1) {
       delete cartMap[dish.id]
       const index = cart.findIndex(item => item.id === dish.id)
