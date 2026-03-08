@@ -5,7 +5,9 @@ const config = require('../../utils/config')
 Page({
   data: {
     loading: false,
-    isLoggedIn: false
+    isLoggedIn: false,
+    avatarUrl: '',
+    nickname: ''
   },
 
   onLoad() {
@@ -27,19 +29,41 @@ Page({
     }
   },
 
-  // 获取用户信息并登录
+  // 选择头像
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    this.setData({ avatarUrl })
+  },
+
+  // 输入昵称
+  onNicknameInput(e) {
+    this.setData({ nickname: e.detail.value })
+  },
+
+  onNicknameBlur(e) {
+    this.setData({ nickname: e.detail.value })
+  },
+
+  // 登录
   async handleLogin() {
+    const { avatarUrl, nickname } = this.data
+    
+    if (!nickname) {
+      wx.showToast({
+        title: '请输入昵称',
+        icon: 'none'
+      })
+      return
+    }
+
     this.setData({ loading: true })
     
     try {
-      // 先获取用户信息
-      const userProfile = await this.getUserProfile()
-      
-      // 再调用微信登录
+      // 获取微信登录 code
       const loginRes = await this.wxLogin()
       
       // 发送到后端
-      await this.loginToServer(loginRes.code, userProfile)
+      await this.loginToServer(loginRes.code, nickname, avatarUrl)
       
       this.setData({ loading: false, isLoggedIn: true })
       
@@ -50,28 +74,6 @@ Page({
       console.error('登录失败', err)
       this.setData({ loading: false })
     }
-  },
-
-  // 获取用户信息
-  getUserProfile() {
-    return new Promise((resolve, reject) => {
-      wx.getUserProfile({
-        desc: '用于完善用户资料',
-        success: (res) => {
-          resolve({
-            nickname: res.userInfo.nickName,
-            avatar: res.userInfo.avatarUrl
-          })
-        },
-        fail: (err) => {
-          // 用户拒绝授权，使用默认信息
-          resolve({
-            nickname: '微信用户',
-            avatar: ''
-          })
-        }
-      })
-    })
   },
 
   // 微信登录获取 code
@@ -91,15 +93,15 @@ Page({
   },
 
   // 登录到服务器
-  loginToServer(code, userProfile) {
+  loginToServer(code, nickname, avatar) {
     return new Promise((resolve, reject) => {
       wx.request({
         url: `${config.apiBaseUrl}/auth/wechat-login`,
         method: 'POST',
         data: {
           code: code,
-          nickname: userProfile.nickname,
-          avatar: userProfile.avatar
+          nickname: nickname,
+          avatar: avatar
         },
         success: (response) => {
           if (response.data.token) {
