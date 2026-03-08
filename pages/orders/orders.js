@@ -39,6 +39,7 @@ Page({
         ...order,
         createdAt: order.created_at,
         formattedTime: formatDate(order.created_at, 'MM-DD HH:mm'),
+        formattedDate: formatDate(order.order_date || order.date, 'MM月DD日'),
         items: (order.items || []).map(item => ({
           ...item,
           dishName: item.dish_name || item.name

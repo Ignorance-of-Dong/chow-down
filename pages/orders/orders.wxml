@@ -19,7 +19,7 @@
     >
       <view class="order-header">
         <view class="order-info">
-          <text class="order-date">{{item.order_date || item.date}}</text>
+          <text class="order-date">{{item.formattedDate}}</text>
           <text class="order-meal">{{item.meal_type === 'breakfast' ? '早餐' : item.meal_type === 'lunch' ? '午餐' : item.meal_type === 'dinner' ? '晚餐' : '夜宵'}}</text>
         </view>
         <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'preparing' || item.status === 'ready' ? 'status-cooking' : 'status-completed'}}">
