@@ -19,13 +19,49 @@ Page({
   },
 
   checkLogin() {
-    const isLoggedIn = !!app.globalData.token
-    this.setData({ isLoggedIn })
-    
-    if (isLoggedIn) {
-      wx.switchTab({
-        url: '/pages/index/index'
+    // 检查本地是否有 token
+    const token = wx.getStorageSync('token')
+    if (token) {
+      // 已登录，从后端获取用户信息
+      this.fetchUserInfo()
+    }
+  },
+
+  // 从后端获取用户信息
+  async fetchUserInfo() {
+    try {
+      const token = wx.getStorageSync('token')
+      const res = await new Promise((resolve, reject) => {
+        wx.request({
+          url: `${config.apiBaseUrl}/auth/wechat-login`,
+          method: 'POST',
+          data: { code: 'check' },
+          header: {
+            'Authorization': `Bearer ${token}`
+          },
+          success: resolve,
+          fail: reject
+        })
       })
+
+      if (res.data.token) {
+        // 登录成功，更新用户信息
+        app.globalData.token = res.data.token
+        app.globalData.userInfo = res.data.user
+        app.globalData.isLoggedIn = true
+        
+        // 跳转到点餐页
+        wx.switchTab({
+          url: '/pages/index/index'
+        })
+      } else {
+        // token 无效，清除并显示登录页
+        wx.removeStorageSync('token')
+        this.setData({ isLoggedIn: false })
+      }
+    } catch (err) {
+      console.error('获取用户信息失败', err)
+      this.setData({ isLoggedIn: false })
     }
   },
 
