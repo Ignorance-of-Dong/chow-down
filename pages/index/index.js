@@ -1,6 +1,5 @@
 // pages/index/index.js
 const { dishApi } = require('../../api/index')
-const { getCategoryName } = require('../../utils/util')
 
 Page({
   data: {
@@ -8,16 +7,22 @@ Page({
     selectedDate: '',
     selectedMeal: 'lunch',
     meals: [
-      { value: 'breakfast', label: '早餐' },
-      { value: 'lunch', label: '午餐' },
-      { value: 'dinner', label: '晚餐' },
-      { value: 'supper', label: '夜宵' }
+      { value: 'breakfast', label: '早餐', time: '07:00-09:00' },
+      { value: 'lunch', label: '午餐', time: '11:00-13:00' },
+      { value: 'dinner', label: '晚餐', time: '17:00-19:00' },
+      { value: 'supper', label: '夜宵', time: '21:00-23:00' }
     ],
     categories: ['热菜', '素菜', '汤类', '主食'],
+    currentCategory: '热菜',
     dishesByCategory: {},
+    categoryCounts: {},
     hasDishes: false,
     cart: [],
-    cartCount: 0
+    cartMap: {},
+    cartCount: 0,
+    totalPrice: 0,
+    showCartPopup: false,
+    scrollToView: ''
   },
 
   onLoad() {
@@ -26,18 +31,15 @@ Page({
   },
 
   onShow() {
-    // 从确认页返回时刷新购物车显示
     this.updateCartDisplay()
   },
 
-  // 初始化日期
   initDate() {
     const today = new Date()
     const dateStr = this.formatDate(today)
     this.setData({ selectedDate: dateStr })
   },
 
-  // 格式化日期
   formatDate(date) {
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -45,28 +47,26 @@ Page({
     return `${year}-${month}-${day}`
   },
 
-  // 加载菜品
   async loadDishes() {
     try {
       this.setData({ loading: true })
       const res = await dishApi.getList({ date: this.data.selectedDate })
-
-      console.log('菜品数据:', res)
-
-      // 后端返回的菜品数据
       const dishes = res.data || []
 
-      // 按分类分组，只显示可用的菜品
       const dishesByCategory = {}
+      const categoryCounts = {}
       let hasDishes = false
+
       this.data.categories.forEach(cat => {
         const categoryDishes = dishes.filter(d => d.category === cat && d.status === 'available')
         dishesByCategory[cat] = categoryDishes
+        categoryCounts[cat] = 0
         if (categoryDishes.length > 0) hasDishes = true
       })
 
       this.setData({
         dishesByCategory,
+        categoryCounts,
         hasDishes,
         loading: false
       })
@@ -76,57 +76,96 @@ Page({
     }
   },
 
-  // 选择日期
-  onDateChange(e) {
-    this.setData({ selectedDate: e.detail.value })
-    this.loadDishes()
-  },
-
-  // 选择餐次
   onMealSelect(e) {
     const meal = e.currentTarget.dataset.meal
     this.setData({ selectedMeal: meal })
   },
 
-  // 添加到购物车
-  addToCart(e) {
-    const dish = e.currentTarget.dataset.dish
-    const cart = [...this.data.cart]
-    const existIndex = cart.findIndex(item => item.id === dish.id)
-
-    if (existIndex > -1) {
-      cart[existIndex].quantity += 1
-    } else {
-      cart.push({ ...dish, quantity: 1, remark: '' })
-    }
-
-    this.setData({ cart })
-    this.updateCartDisplay()
-
-    wx.showToast({
-      title: '已加入购物车',
-      icon: 'success',
-      duration: 1000
+  onCategoryTap(e) {
+    const category = e.currentTarget.dataset.category
+    this.setData({
+      currentCategory: category,
+      scrollToView: 'cat-' + category
     })
   },
 
-  // 更新购物车显示
-  updateCartDisplay() {
-    const cartCount = this.data.cart.reduce((sum, item) => sum + item.quantity, 0)
-    this.setData({ cartCount })
+  addToCart(e) {
+    const dish = e.currentTarget.dataset.dish
+    const cart = [...this.data.cart]
+    const cartMap = { ...this.data.cartMap }
+    
+    if (cartMap[dish.id]) {
+      cartMap[dish.id]++
+    } else {
+      cartMap[dish.id] = 1
+      cart.push({ ...dish, quantity: 1 })
+    }
+
+    this.setData({ cart, cartMap })
+    this.updateCartDisplay()
   },
 
-  // 去确认订单页
+  removeFromCart(e) {
+    const dish = e.currentTarget.dataset.dish
+    const cart = [...this.data.cart]
+    const cartMap = { ...this.data.cartMap }
+
+    if (cartMap[dish.id] > 1) {
+      cartMap[dish.id]--
+    } else {
+      delete cartMap[dish.id]
+      const index = cart.findIndex(item => item.id === dish.id)
+      if (index > -1) cart.splice(index, 1)
+    }
+
+    this.setData({ cart, cartMap })
+    this.updateCartDisplay()
+  },
+
+  updateCartDisplay() {
+    const cartCount = this.data.cart.reduce((sum, item) => sum + item.quantity, 0)
+    const totalPrice = this.data.cart.reduce((sum, item) => sum + item.quantity * parseFloat(item.price || 0), 0)
+    
+    // 更新分类角标
+    const categoryCounts = { ...this.data.categoryCounts }
+    this.data.categories.forEach(cat => {
+      categoryCounts[cat] = this.data.cart
+        .filter(item => {
+          const dish = this.data.dishesByCategory[cat]?.find(d => d.id === item.id)
+          return dish
+        })
+        .reduce((sum, item) => sum + item.quantity, 0)
+    })
+
+    this.setData({ 
+      cartCount, 
+      totalPrice: totalPrice.toFixed(2),
+      categoryCounts
+    })
+  },
+
+  toggleCartPopup() {
+    if (this.data.cartCount === 0) return
+    this.setData({ showCartPopup: !this.data.showCartPopup })
+  },
+
+  clearCart() {
+    this.setData({ 
+      cart: [], 
+      cartMap: {}, 
+      cartCount: 0, 
+      totalPrice: 0,
+      showCartPopup: false
+    })
+    this.updateCartDisplay()
+  },
+
   goToConfirm() {
     if (this.data.cart.length === 0) {
-      wx.showToast({
-        title: '请先选择菜品',
-        icon: 'none'
-      })
+      wx.showToast({ title: '请先选择菜品', icon: 'none' })
       return
     }
 
-    // 存储购物车数据到全局
     const app = getApp()
     app.globalData.tempCart = {
       date: this.data.selectedDate,
@@ -134,21 +173,6 @@ Page({
       items: this.data.cart
     }
 
-    wx.navigateTo({
-      url: '/pages/confirm/confirm'
-    })
-  },
-
-  // 清空购物车
-  clearCart() {
-    wx.showModal({
-      title: '提示',
-      content: '确定要清空购物车吗？',
-      success: (res) => {
-        if (res.confirm) {
-          this.setData({ cart: [], cartCount: 0 })
-        }
-      }
-    })
+    wx.navigateTo({ url: '/pages/confirm/confirm' })
   }
 })
