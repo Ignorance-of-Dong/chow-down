@@ -22,7 +22,8 @@ Page({
     cartCount: 0,
     totalPrice: 0,
     showCartPopup: false,
-    scrollToView: ''
+    scrollToView: '',
+    scrollTop: 0
   },
 
   onLoad() {
@@ -83,10 +84,41 @@ Page({
 
   onCategoryTap(e) {
     const category = e.currentTarget.dataset.category
+    // 计算分类对应的scrollTop值
+    let scrollTop = 0
+    const categories = this.data.categories
+    for (let i = 0; i < categories.length; i++) {
+      if (categories[i] === category) break
+      // 每个分类区块的高度估算：标题40 + 菜品数量 * 230
+      const dishes = this.data.dishesByCategory[categories[i]] || []
+      scrollTop += 40 + dishes.length * 230
+    }
+    
     this.setData({
       currentCategory: category,
-      scrollToView: 'cat-' + category
+      scrollTop: scrollTop
     })
+  },
+
+  onScroll(e) {
+    // 根据滚动位置更新当前分类
+    const scrollTop = e.detail.scrollTop
+    const categories = this.data.categories
+    let currentCategory = categories[0]
+    let height = 0
+    
+    for (let i = 0; i < categories.length; i++) {
+      const dishes = this.data.dishesByCategory[categories[i]] || []
+      const sectionHeight = 40 + dishes.length * 230
+      if (scrollTop >= height) {
+        currentCategory = categories[i]
+      }
+      height += sectionHeight
+    }
+    
+    if (currentCategory !== this.data.currentCategory) {
+      this.setData({ currentCategory })
+    }
   },
 
   addToCart(e) {
@@ -96,6 +128,8 @@ Page({
     
     if (cartMap[dish.id]) {
       cartMap[dish.id]++
+      const item = cart.find(c => c.id === dish.id)
+      if (item) item.quantity = cartMap[dish.id]
     } else {
       cartMap[dish.id] = 1
       cart.push({ ...dish, quantity: 1 })
@@ -112,6 +146,8 @@ Page({
 
     if (cartMap[dish.id] > 1) {
       cartMap[dish.id]--
+      const item = cart.find(c => c.id === dish.id)
+      if (item) item.quantity = cartMap[dish.id]
     } else {
       delete cartMap[dish.id]
       const index = cart.findIndex(item => item.id === dish.id)
@@ -150,14 +186,20 @@ Page({
   },
 
   clearCart() {
+    // 清空分类角标
+    const categoryCounts = {}
+    this.data.categories.forEach(cat => {
+      categoryCounts[cat] = 0
+    })
+    
     this.setData({ 
       cart: [], 
       cartMap: {}, 
       cartCount: 0, 
-      totalPrice: 0,
+      totalPrice: '0.00',
+      categoryCounts,
       showCartPopup: false
     })
-    this.updateCartDisplay()
   },
 
   goToConfirm() {

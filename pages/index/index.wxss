@@ -345,19 +345,8 @@
   color: #999;
 }
 
-.cart-tip {
-  font-size: 22rpx;
-  color: #999;
-}
-
-.cart-right {
-  
-}
-
 .submit-btn {
   padding: 24rpx 50rpx;
-  background: #999;
-  color: #fff;
   border-radius: 50rpx;
   font-size: 30rpx;
   font-weight: 600;
@@ -366,6 +355,11 @@
 .submit-btn.active {
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   color: #333;
+}
+
+.submit-btn.disabled {
+  background: #ddd;
+  color: #999;
 }
 
 /* 购物车弹窗 */

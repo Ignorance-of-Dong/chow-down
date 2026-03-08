@@ -42,7 +42,12 @@
     </scroll-view>
 
     <!-- 右侧菜品列表 -->
-    <scroll-view class="dish-area" scroll-y scroll-into-view="{{scrollToView}}">
+    <scroll-view 
+      class="dish-area" 
+      scroll-y 
+      scroll-top="{{scrollTop}}"
+      bindscroll="onScroll"
+    >
       <!-- 加载中 -->
       <view wx:if="{{loading}}" class="loading">
         <text>加载中...</text>
@@ -51,7 +56,7 @@
       <!-- 菜品列表 -->
       <view wx:else>
         <block wx:for="{{categories}}" wx:key="*this">
-          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" id="cat-{{item}}">
+          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" data-category="{{item}}">
             <view class="section-title">{{item}}</view>
             <view class="dish-list">
               <view
@@ -70,7 +75,6 @@
                   <view class="dish-desc" wx:if="{{dish.description}}">{{dish.description}}</view>
                   <view class="dish-sales">
                     <text>月售 {{dish.sales || 99}}</text>
-                    <text wx:if="{{dish.cookTime}}"> · 约{{dish.cookTime}}分钟</text>
                   </view>
                   <view class="dish-bottom">
                     <view class="dish-price">
@@ -120,12 +124,11 @@
           <text class="price-value">{{totalPrice}}</text>
         </view>
         <text wx:else class="cart-empty">购物车是空的</text>
-        <text class="cart-tip">另需配送费约 ¥0</text>
       </view>
     </view>
     <view class="cart-right">
-      <view class="submit-btn {{cartCount > 0 ? 'active' : ''}}" bindtap="goToConfirm">
-        <text>{{cartCount > 0 ? '去结算' : '¥20起送'}}</text>
+      <view class="submit-btn {{cartCount > 0 ? 'active' : 'disabled'}}" bindtap="goToConfirm">
+        <text>{{cartCount > 0 ? '去结算' : '请选择菜品'}}</text>
       </view>
     </view>
   </view>
