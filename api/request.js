@@ -38,7 +38,7 @@ const request = (options) => {
         data,
         header,
         success: (res) => {
-          if (res.statusCode === 200) {
+          if (res.statusCode === 200 || res.statusCode === 201) {
             // 兼容后端返回格式
             if (res.data.dishes || res.data.users || res.data.orders || res.data.order || res.data.message === '登录成功' || res.data.message === '下单成功') {
               const data = res.data.dishes || res.data.users || res.data.orders || res.data.order || res.data
