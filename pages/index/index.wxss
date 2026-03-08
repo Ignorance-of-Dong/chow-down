@@ -112,6 +112,7 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  padding-bottom: 200rpx;
 }
 
 /* 左侧分类栏 */
@@ -322,12 +323,17 @@
 
 /* 购物车栏 */
 .cart-bar {
+  position: fixed;
+  bottom: calc(100rpx + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16rpx 20rpx;
   background: #fff;
-  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 50;
 }
 
 .cart-left {
@@ -424,7 +430,7 @@
 
 .cart-popup {
   position: absolute;
-  bottom: 140rpx;
+  bottom: calc(240rpx + env(safe-area-inset-bottom));
   left: 20rpx;
   right: 20rpx;
   background: #fff;
