@@ -1,0 +1,89 @@
+<!--pages/index/index.wxml-->
+<view class="page">
+  <!-- 日期和餐次选择 -->
+  <view class="header card">
+    <view class="date-picker">
+      <text class="label">用餐日期</text>
+      <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
+        <view class="picker-value">{{selectedDate}}</view>
+      </picker>
+    </view>
+    <view class="meal-tabs">
+      <view
+        wx:for="{{meals}}"
+        wx:key="value"
+        class="meal-tab {{selectedMeal === item.value ? 'active' : ''}}"
+        data-meal="{{item.value}}"
+        bindtap="onMealSelect"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 菜品列表 -->
+  <view wx:else class="dish-list">
+    <block wx:for="{{categories}}" wx:key="*this">
+      <view wx:if="{{dishesByCategory[item].length > 0}}" class="category-section">
+        <view class="category-title">{{item === 'meat' ? '荤菜' : item === 'vegetable' ? '素菜' : item === 'soup' ? '汤' : '主食'}}</view>
+        <view class="dish-grid">
+          <view
+            wx:for="{{dishesByCategory[item]}}"
+            wx:for-item="dish"
+            wx:key="id"
+            class="dish-card card"
+            data-dish="{{dish}}"
+            bindtap="addToCart"
+          >
+            <image
+              wx:if="{{dish.image}}"
+              class="dish-image"
+              src="{{dish.image}}"
+              mode="aspectFill"
+            />
+            <view class="dish-image dish-placeholder" wx:else>
+              <text>🍽️</text>
+            </view>
+            <view class="dish-info">
+              <view class="dish-name">{{dish.name}}</view>
+              <view class="dish-desc" wx:if="{{dish.description}}">{{dish.description}}</view>
+              <view class="dish-time" wx:if="{{dish.cookTime}}">
+                <text class="time-icon">⏱️</text>
+                <text>{{dish.cookTime}}分钟</text>
+              </view>
+            </view>
+            <view class="add-btn">
+              <text>+</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && !hasDishes}}" class="empty-state">
+      <view class="icon">🍽️</view>
+      <text>今日暂无菜品</text>
+    </view>
+  </view>
+
+  <!-- 底部购物车栏 -->
+  <view class="cart-bar" wx:if="{{cartCount > 0}}">
+    <view class="cart-info" bindtap="goToConfirm">
+      <view class="cart-icon">
+        <text>🛒</text>
+        <view class="cart-badge">{{cartCount}}</view>
+      </view>
+      <text class="cart-text">已选 {{cartCount}} 道菜</text>
+    </view>
+    <view class="cart-actions">
+      <view class="clear-btn" catchtap="clearCart">清空</view>
+      <view class="submit-btn" bindtap="goToConfirm">去下单</view>
+    </view>
+  </view>
+</view>

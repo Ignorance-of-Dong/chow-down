@@ -1,0 +1,39 @@
+<!--pages/profile/profile.wxml-->
+<view class="page">
+  <!-- 用户信息 -->
+  <view class="user-section card">
+    <view wx:if="{{userInfo}}" class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="info">
+        <text class="name">{{userInfo.name || '家庭成员'}}</text>
+        <text class="role" wx:if="{{isAdmin}}">👨‍🍳 厨师/管理员</text>
+        <text class="role" wx:else>👤 普通成员</text>
+      </view>
+    </view>
+    <view wx:else class="login-hint">
+      <text>未登录</text>
+      <button class="login-btn" bindtap="getUserProfile">登录</button>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-item card" wx:if="{{isAdmin}}" bindtap="goToAdmin">
+      <view class="menu-icon">📊</view>
+      <text class="menu-text">管理后台</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
+    <view class="menu-item card" bindtap="logout">
+      <view class="menu-icon">🚪</view>
+      <text class="menu-text">退出登录</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="about-section">
+    <text class="version">家庭点餐助手 v1.0.0</text>
+    <text class="copyright">Made with ❤️ by 小牛马 & 小六子</text>
+  </view>
+</view>

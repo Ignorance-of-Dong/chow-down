@@ -1,0 +1,53 @@
+<!--pages/orders/orders.wxml-->
+<view class="page">
+  <!-- 管理员标识 -->
+  <view wx:if="{{isAdmin}}" class="admin-badge">
+    <text>👨‍🍳 管理员视角 - 查看所有订单</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 订单列表 -->
+  <view wx:elif="{{orders.length > 0}}" class="order-list">
+    <view
+      class="order-card card"
+      wx:for="{{orders}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="viewOrder"
+    >
+      <view class="order-header">
+        <view class="order-info">
+          <text class="order-date">{{item.date}}</text>
+          <text class="order-meal">{{item.mealName || getMealTypeName(item.meal)}}</text>
+        </view>
+        <view class="order-status {{item.status === 'pending' ? 'status-pending' : item.status === 'cooking' ? 'status-cooking' : 'status-completed'}}">
+          {{getStatusName(item.status)}}
+        </view>
+      </view>
+
+      <view class="order-dishes">
+        <text wx:for="{{item.items}}" wx:for-item="dish" wx:key="dishId">
+          {{dish.dishName}} x{{dish.quantity}}
+        </text>
+      </view>
+
+      <view class="order-footer">
+        <text class="order-time">{{formatDate(item.createdAt)}}</text>
+        <view wx:if="{{isAdmin && item.status !== 'completed'}}" class="status-btn" catchtap="updateStatus" data-id="{{item.id}}" data-status="{{item.status === 'pending' ? 'cooking' : 'completed'}}">
+          {{item.status === 'pending' ? '开始制作' : '标记完成'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <view class="icon">📋</view>
+    <text>暂无订单</text>
+    <view class="hint">去点餐页面选择喜欢的菜品吧</view>
+  </view>
+</view>

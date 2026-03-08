@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/confirm/confirm",
+    "pages/orders/orders",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FF6B6B",
+    "navigationBarTitleText": "家庭点餐助手",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF6B6B",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "点餐",
+        "iconPath": "images/order.png",
+        "selectedIconPath": "images/order-active.png"
+      },
+      {
+        "pagePath": "pages/orders/orders",
+        "text": "我的订单",
+        "iconPath": "images/list.png",
+        "selectedIconPath": "images/list-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
