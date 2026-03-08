@@ -1,16 +1,32 @@
 /* pages/home/home.wxss */
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  background: linear-gradient(180deg, #FF6B6B 0%, #FF8E8E 50%, #FFA07A 100%);
 }
 
 .loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   color: #fff;
+}
+
+.loading .logo {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20rpx); }
+}
+
+.loading text {
   font-size: 28rpx;
+  opacity: 0.9;
 }
 
 .register {
@@ -18,39 +34,43 @@
   flex-direction: column;
   align-items: center;
   padding: 100rpx 40rpx;
+  min-height: 100vh;
 }
 
-.logo {
-  font-size: 100rpx;
-  margin-bottom: 20rpx;
+.register .logo {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
 }
 
 .title {
-  font-size: 44rpx;
+  font-size: 48rpx;
   font-weight: bold;
   color: #fff;
   margin-bottom: 16rpx;
+  text-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .desc {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 60rpx;
+  text-align: center;
 }
 
 .form {
   width: 100%;
-  background: #fff;
-  border-radius: 20rpx;
-  padding: 40rpx;
-  margin-bottom: 40rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 50rpx 40rpx;
+  margin-bottom: 50rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.15);
 }
 
 .form-item {
   display: flex;
   align-items: center;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
 }
 
 .form-item:last-child {
@@ -58,9 +78,10 @@
 }
 
 .label {
-  width: 120rpx;
-  font-size: 28rpx;
+  width: 100rpx;
+  font-size: 30rpx;
   color: #333;
+  font-weight: 500;
 }
 
 .avatar-btn {
@@ -76,26 +97,35 @@
 }
 
 .avatar {
-  width: 100rpx;
-  height: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  border: 4rpx solid #FF6B6B;
 }
 
 .nickname-input {
   flex: 1;
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #333;
+  padding: 20rpx 24rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
 }
 
 .submit-btn {
-  width: 80%;
-  height: 96rpx;
-  line-height: 96rpx;
+  width: 85%;
+  height: 100rpx;
+  line-height: 100rpx;
   background: #fff;
   color: #FF6B6B;
-  font-size: 32rpx;
-  font-weight: 500;
-  border-radius: 48rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  border-radius: 50rpx;
   border: none;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
 }

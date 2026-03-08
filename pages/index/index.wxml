@@ -1,7 +1,7 @@
 <!--pages/index/index.wxml-->
 <view class="page">
   <!-- 日期和餐次选择 -->
-  <view class="header card">
+  <view class="header">
     <view class="date-picker">
       <text class="label">用餐日期</text>
       <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
@@ -52,6 +52,7 @@
             <view class="dish-info">
               <view class="dish-name">{{dish.name}}</view>
               <view class="dish-desc" wx:if="{{dish.description}}">{{dish.description}}</view>
+              <view class="dish-price">¥{{dish.price}}</view>
             </view>
             <view class="add-btn">
               <text>+</text>
