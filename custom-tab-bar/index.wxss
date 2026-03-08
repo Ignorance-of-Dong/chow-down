@@ -25,10 +25,16 @@
   font-weight: 600;
 }
 
-.tab-bar-item.active::after {
+.tab-bar-item.active .tab-text {
+  position: relative;
+}
+
+.tab-bar-item.active .tab-text::after {
   content: '';
   position: absolute;
-  bottom: 16rpx;
+  bottom: -12rpx;
+  left: 50%;
+  transform: translateX(-50%);
   width: 40rpx;
   height: 6rpx;
   background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
