@@ -321,7 +321,7 @@
 }
 
 .dish-bottom-placeholder {
-  height: 240rpx;
+  height: 320rpx;
 }
 
 /* 购物车栏 */
