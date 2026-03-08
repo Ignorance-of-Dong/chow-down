@@ -8,7 +8,7 @@
 
 /* 顶部栏 */
 .header {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  background: linear-gradient(180deg, #FF6B6B 0%, #FF8E8E 100%);
   padding: 0 20rpx 20rpx;
 }
 
@@ -30,13 +30,14 @@
 }
 
 .location-text {
-  color: #333;
+  color: #fff;
   font-size: 30rpx;
   font-weight: 600;
 }
 
 .search-icon {
   font-size: 36rpx;
+  filter: brightness(10);
 }
 
 .meal-tabs {
@@ -60,15 +61,23 @@
 .meal-name {
   display: block;
   font-size: 28rpx;
-  color: #333;
+  color: #fff;
   font-weight: 500;
+}
+
+.meal-tab.active .meal-name {
+  color: #FF6B6B;
 }
 
 .meal-time {
   display: block;
   font-size: 22rpx;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   margin-top: 4rpx;
+}
+
+.meal-tab.active .meal-time {
+  color: #999;
 }
 
 /* 主体区域 */
@@ -96,9 +105,9 @@
 
 .category-item.active {
   background: #fff;
-  color: #333;
+  color: #FF6B6B;
   font-weight: 600;
-  border-left-color: #FFD700;
+  border-left-color: #FF6B6B;
 }
 
 .category-badge {
@@ -157,7 +166,7 @@
   height: 180rpx;
   border-radius: 12rpx;
   flex-shrink: 0;
-  background: #f9f9f9;
+  background: linear-gradient(180deg, #FFF5F5 0%, #FFE4E4 100%);
 }
 
 .dish-content {
@@ -236,7 +245,7 @@
 }
 
 .action-btn.plus {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
   color: #fff;
 }
 
@@ -300,7 +309,7 @@
 }
 
 .cart-bar.has-items .cart-icon-wrap {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
 }
 
 .cart-icon {
@@ -353,8 +362,8 @@
 }
 
 .submit-btn.active {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #333;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  color: #fff;
 }
 
 .submit-btn.disabled {
@@ -400,7 +409,7 @@
 
 .popup-clear {
   font-size: 26rpx;
-  color: #999;
+  color: #FF6B6B;
 }
 
 .popup-list {
