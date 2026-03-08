@@ -20,10 +20,10 @@ Page({
     cart: [],
     cartMap: {},
     cartCount: 0,
-    totalPrice: 0,
+    totalPrice: '0.00',
     showCartPopup: false,
-    scrollToView: '',
-    scrollTop: 0
+    scrollTop: 0,
+    intoView: ''
   },
 
   onLoad() {
@@ -57,18 +57,23 @@ Page({
       const dishesByCategory = {}
       const categoryCounts = {}
       let hasDishes = false
+      let currentCategory = ''
 
       this.data.categories.forEach(cat => {
         const categoryDishes = dishes.filter(d => d.category === cat && d.status === 'available')
         dishesByCategory[cat] = categoryDishes
         categoryCounts[cat] = 0
-        if (categoryDishes.length > 0) hasDishes = true
+        if (categoryDishes.length > 0 && !currentCategory) {
+          currentCategory = cat
+          hasDishes = true
+        }
       })
 
       this.setData({
         dishesByCategory,
         categoryCounts,
         hasDishes,
+        currentCategory: currentCategory || this.data.categories[0],
         loading: false
       })
     } catch (err) {
@@ -82,38 +87,32 @@ Page({
     this.setData({ selectedMeal: meal })
   },
 
+  // 点击分类 - 使用 scroll-into-view
   onCategoryTap(e) {
     const category = e.currentTarget.dataset.category
-    // 计算分类对应的scrollTop值
-    let scrollTop = 0
-    const categories = this.data.categories
-    for (let i = 0; i < categories.length; i++) {
-      if (categories[i] === category) break
-      // 每个分类区块的高度估算：标题40 + 菜品数量 * 230
-      const dishes = this.data.dishesByCategory[categories[i]] || []
-      scrollTop += 40 + dishes.length * 230
-    }
-    
     this.setData({
       currentCategory: category,
-      scrollTop: scrollTop
+      intoView: 'cat-' + category.replace(/\s/g, '')
     })
   },
 
+  // 滚动监听 - 更新当前分类
   onScroll(e) {
-    // 根据滚动位置更新当前分类
     const scrollTop = e.detail.scrollTop
     const categories = this.data.categories
+    const dishesByCategory = this.data.dishesByCategory
+    
     let currentCategory = categories[0]
-    let height = 0
+    let accumulatedHeight = 0
     
     for (let i = 0; i < categories.length; i++) {
-      const dishes = this.data.dishesByCategory[categories[i]] || []
-      const sectionHeight = 40 + dishes.length * 230
-      if (scrollTop >= height) {
+      const dishes = dishesByCategory[categories[i]] || []
+      // 每个分类高度：标题50 + 菜品数量 * 230
+      const sectionHeight = 50 + dishes.length * 230
+      if (scrollTop >= accumulatedHeight - 50) {
         currentCategory = categories[i]
       }
-      height += sectionHeight
+      accumulatedHeight += sectionHeight
     }
     
     if (currentCategory !== this.data.currentCategory) {
@@ -121,34 +120,42 @@ Page({
     }
   },
 
+  // 添加到购物车
   addToCart(e) {
     const dish = e.currentTarget.dataset.dish
-    const cart = [...this.data.cart]
+    if (!dish || !dish.id) return
+
     const cartMap = { ...this.data.cartMap }
+    const cart = [...this.data.cart]
     
     if (cartMap[dish.id]) {
       cartMap[dish.id]++
-      const item = cart.find(c => c.id === dish.id)
-      if (item) item.quantity = cartMap[dish.id]
     } else {
       cartMap[dish.id] = 1
-      cart.push({ ...dish, quantity: 1 })
+      cart.push({ 
+        id: dish.id, 
+        name: dish.name, 
+        price: dish.price,
+        image: dish.image,
+        quantity: 1 
+      })
     }
 
     this.setData({ cart, cartMap })
     this.updateCartDisplay()
   },
 
+  // 从购物车移除
   removeFromCart(e) {
     const dish = e.currentTarget.dataset.dish
-    const cart = [...this.data.cart]
-    const cartMap = { ...this.data.cartMap }
+    if (!dish || !dish.id) return
 
-    if (cartMap[dish.id] > 1) {
+    const cartMap = { ...this.data.cartMap }
+    const cart = [...this.data.cart]
+
+    if (cartMap[dish.id] && cartMap[dish.id] > 1) {
       cartMap[dish.id]--
-      const item = cart.find(c => c.id === dish.id)
-      if (item) item.quantity = cartMap[dish.id]
-    } else {
+    } else if (cartMap[dish.id] === 1) {
       delete cartMap[dish.id]
       const index = cart.findIndex(item => item.id === dish.id)
       if (index > -1) cart.splice(index, 1)
@@ -158,19 +165,29 @@ Page({
     this.updateCartDisplay()
   },
 
+  // 更新购物车显示
   updateCartDisplay() {
-    const cartCount = this.data.cart.reduce((sum, item) => sum + item.quantity, 0)
-    const totalPrice = this.data.cart.reduce((sum, item) => sum + item.quantity * parseFloat(item.price || 0), 0)
+    const { cart, cartMap, categories, dishesByCategory } = this.data
+    
+    // 计算总数量和总价
+    let cartCount = 0
+    let totalPrice = 0
+    cart.forEach(item => {
+      cartCount += item.quantity
+      totalPrice += item.quantity * parseFloat(item.price || 0)
+    })
     
     // 更新分类角标
-    const categoryCounts = { ...this.data.categoryCounts }
-    this.data.categories.forEach(cat => {
-      categoryCounts[cat] = this.data.cart
-        .filter(item => {
-          const dish = this.data.dishesByCategory[cat]?.find(d => d.id === item.id)
-          return dish
-        })
-        .reduce((sum, item) => sum + item.quantity, 0)
+    const categoryCounts = {}
+    categories.forEach(cat => {
+      const catDishes = dishesByCategory[cat] || []
+      let count = 0
+      cart.forEach(item => {
+        if (catDishes.find(d => d.id === item.id)) {
+          count += item.quantity
+        }
+      })
+      categoryCounts[cat] = count
     })
 
     this.setData({ 
@@ -180,13 +197,14 @@ Page({
     })
   },
 
+  // 切换购物车弹窗
   toggleCartPopup() {
     if (this.data.cartCount === 0) return
     this.setData({ showCartPopup: !this.data.showCartPopup })
   },
 
+  // 清空购物车
   clearCart() {
-    // 清空分类角标
     const categoryCounts = {}
     this.data.categories.forEach(cat => {
       categoryCounts[cat] = 0
@@ -202,6 +220,7 @@ Page({
     })
   },
 
+  // 去结算
   goToConfirm() {
     if (this.data.cart.length === 0) {
       wx.showToast({ title: '请先选择菜品', icon: 'none' })

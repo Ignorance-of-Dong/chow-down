@@ -45,7 +45,8 @@
     <scroll-view 
       class="dish-area" 
       scroll-y 
-      scroll-top="{{scrollTop}}"
+      scroll-into-view="{{intoView}}"
+      scroll-with-animation
       bindscroll="onScroll"
     >
       <!-- 加载中 -->
@@ -56,7 +57,7 @@
       <!-- 菜品列表 -->
       <view wx:else>
         <block wx:for="{{categories}}" wx:key="*this">
-          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" data-category="{{item}}">
+          <view wx:if="{{dishesByCategory[item].length > 0}}" class="dish-section" id="cat-{{item}}">
             <view class="section-title">{{item}}</view>
             <view class="dish-list">
               <view
