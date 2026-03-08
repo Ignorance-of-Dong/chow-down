@@ -68,11 +68,15 @@
                 wx:key="id"
                 class="dish-item"
               >
-                <image
-                  class="dish-image"
-                  src="{{dish.image || '/images/default-dish.png'}}"
-                  mode="aspectFill"
-                />
+                <view class="dish-image-wrap">
+                  <image
+                    wx:if="{{dish.image}}"
+                    class="dish-image"
+                    src="{{dish.image}}"
+                    mode="aspectFill"
+                  />
+                  <view wx:else class="dish-image dish-image-default">🍽️</view>
+                </view>
                 <view class="dish-content">
                   <view class="dish-name">{{dish.name}}</view>
                   <view class="dish-desc" wx:if="{{dish.description}}">{{dish.description}}</view>
