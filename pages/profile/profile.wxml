@@ -23,12 +23,6 @@
       <text class="menu-text">管理后台</text>
       <text class="menu-arrow">›</text>
     </view>
-
-    <view class="menu-item card" bindtap="logout">
-      <view class="menu-icon">🚪</view>
-      <text class="menu-text">退出登录</text>
-      <text class="menu-arrow">›</text>
-    </view>
   </view>
 
   <!-- 关于 -->

@@ -79,27 +79,5 @@ Page({
       title: '请在电脑端打开后台管理系统',
       icon: 'none'
     })
-  },
-
-  // 退出登录
-  logout() {
-    wx.showModal({
-      title: '提示',
-      content: '确定要退出登录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          app.logout()
-          this.setData({
-            userInfo: null,
-            isAdmin: false,
-            hasUserInfo: false
-          })
-          wx.showToast({
-            title: '已退出登录',
-            icon: 'success'
-          })
-        }
-      }
-    })
   }
 })
