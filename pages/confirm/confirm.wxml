@@ -14,7 +14,7 @@
       </view>
       <view class="info-item">
         <text class="info-icon">🔢</text>
-        <text class="info-text">共 {{totalQuantity}} 道菜</text>
+        <text class="info-text">{{totalQuantity}}道</text>
       </view>
     </view>
   </view>
@@ -23,34 +23,34 @@
   <view class="dish-section">
     <view class="section-title">
       <text>已选菜品</text>
-      <text class="section-count">{{items.length}} 种</text>
+      <text class="section-count">{{items.length}}种</text>
     </view>
     
     <view class="dish-list">
       <view class="dish-item" wx:for="{{items}}" wx:key="id">
-        <view class="dish-main">
+        <view class="dish-left">
           <view class="dish-icon">🍽️</view>
-          <view class="dish-content">
-            <view class="dish-name">{{item.name}}</view>
-            <view class="dish-price">¥{{item.price}}</view>
+        </view>
+        <view class="dish-center">
+          <view class="dish-name">{{item.name}}</view>
+          <view class="dish-price">¥{{item.price}}</view>
+          <view class="dish-remark">
+            <input
+              placeholder="备注（如：不放辣椒）"
+              value="{{item.remark}}"
+              data-index="{{index}}"
+              bindinput="onRemarkInput"
+              placeholder-class="remark-placeholder"
+            />
           </view>
+        </view>
+        <view class="dish-right">
           <view class="dish-actions">
             <view class="action-btn minus" data-index="{{index}}" catchtap="decreaseQuantity">-</view>
             <text class="action-num">{{item.quantity}}</text>
             <view class="action-btn plus" data-index="{{index}}" catchtap="increaseQuantity">+</view>
           </view>
-        </view>
-        <view class="dish-remark">
-          <input
-            placeholder="备注（如：不放辣椒）"
-            value="{{item.remark}}"
-            data-index="{{index}}"
-            bindinput="onRemarkInput"
-            placeholder-class="remark-placeholder"
-          />
-        </view>
-        <view class="remove-btn" data-index="{{index}}" catchtap="removeItem">
-          <text>删除</text>
+          <view class="remove-btn" data-index="{{index}}" catchtap="removeItem">删除</view>
         </view>
       </view>
     </view>
