@@ -66,6 +66,7 @@ Page({
         method: 'POST',
         data: { code, nickname, avatar },
         success: (response) => {
+          console.log('登录响应:', response.data)
           if (response.data.token) {
             const { token, user } = response.data
             app.globalData.token = token
@@ -74,11 +75,16 @@ Page({
             app.globalData.isLoggedIn = true
             wx.setStorageSync('token', token)
             resolve({ token, user })
+          } else if (response.data.error) {
+            reject(new Error(response.data.error))
           } else {
-            reject(response.data)
+            reject(new Error('登录失败，请稍后重试'))
           }
         },
-        fail: reject
+        fail: (err) => {
+          console.error('请求失败:', err)
+          reject(new Error('网络请求失败'))
+        }
       })
     })
   },
@@ -116,7 +122,11 @@ Page({
     } catch (err) {
       console.error('注册失败', err)
       this.setData({ loading: false })
-      wx.showToast({ title: '注册失败', icon: 'none' })
+      wx.showToast({ 
+        title: err.message || '注册失败', 
+        icon: 'none',
+        duration: 3000
+      })
     }
   }
 })
