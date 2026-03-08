@@ -13,7 +13,7 @@ Page({
       { value: 'dinner', label: '晚餐' },
       { value: 'supper', label: '夜宵' }
     ],
-    categories: ['meat', 'vegetable', 'soup', 'staple'],
+    categories: ['热菜', '素菜', '汤类', '主食'],
     dishesByCategory: {},
     cart: [],
     cartCount: 0

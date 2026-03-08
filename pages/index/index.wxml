@@ -30,7 +30,7 @@
   <view wx:else class="dish-list">
     <block wx:for="{{categories}}" wx:key="*this">
       <view wx:if="{{dishesByCategory[item].length > 0}}" class="category-section">
-        <view class="category-title">{{item === 'meat' ? '荤菜' : item === 'vegetable' ? '素菜' : item === 'soup' ? '汤' : '主食'}}</view>
+        <view class="category-title">{{item}}</view>
         <view class="dish-grid">
           <view
             wx:for="{{dishesByCategory[item]}}"
